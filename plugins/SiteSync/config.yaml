@@ -1,0 +1,31 @@
+name: SiteSync
+id: SiteSync
+key: SiteSync
+author_link: http://endevver.com
+author_name: Endevver Consulting
+description: It syncs your site
+version: 0.1
+
+task_workers:
+    site_sync:
+        label: Sychronizes content to other servers RELIABLY.
+        class: SiteSync::Worker
+
+callbacks:
+    post_init: $SiteSync::SiteSync::Plugin::post_init
+
+    ## MT::WeblogPublisher and Publish Queue
+    build_page: $SiteSync::SiteSync::Plugin::file_added
+
+    ## Upload file:
+    MT::App::CMS::cms_post_save.asset: $SiteSync::SiteSync::Plugin::file_added
+
+    ## Delete asset:
+    MT::App::CMS::cms_post_delete.asset: $SiteSync::SiteSync::Plugin::file_removed
+
+    ## Better File Uploader
+    cms_upload_file: $SiteSync::SiteSync::Plugin::file_added
+
+    ## End of CMS app mode execution
+    MT::App::CMS::post_run: $SiteSync::SiteSync::cb_cms_post_run
+
