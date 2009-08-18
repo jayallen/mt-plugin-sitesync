@@ -3,7 +3,7 @@ id: SiteSync
 key: SiteSync
 author_link: http://endevver.com
 author_name: Endevver Consulting
-description: It syncs your site
+description: A plugin which replaces MT's native rsync methods with reliable and complete synchronization between your DefaultSiteRoot and any SyncTarget(s) you define using normal, unmolested rsync syntax.
 version: 0.1
 
 config_settings:
