@@ -6,6 +6,10 @@ author_name: Endevver Consulting
 description: It syncs your site
 version: 0.1
 
+config_settings:
+    UseSiteSync:
+        default: 0
+
 task_workers:
     site_sync:
         label: Sychronizes content to other servers RELIABLY.

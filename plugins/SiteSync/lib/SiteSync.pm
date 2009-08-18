@@ -51,6 +51,7 @@ sub sync_now {
     for my $target ( @targets ) {
         MT::TheSchwartz->debug("Syncing files to $target...");
         my $cmd = "$rsync_cmd $rsync_opt $source $target";
+        MT::TheSchwartz->debug( 'Syncing with: '.$cmd );
         # $logger->debug('rsync: ', $cmd);
 
         my $start = [gettimeofday];
