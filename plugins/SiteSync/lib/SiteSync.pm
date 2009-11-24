@@ -55,7 +55,7 @@ sub sync_now {
         # $logger->debug('rsync: ', $cmd);
 
         my $start = [gettimeofday];
-        my $res = system $cmd || '';
+        my $res = `$cmd` || '';
         if ( $res ) {
             # $logger->debug($res);
             MT::TheSchwartz->debug($res);
@@ -77,11 +77,15 @@ sub sync_now {
             });
         } else {
             my $elapsed = sprintf("done! (%0.02fs)", tv_interval($start));
+            my $metadata = ($res ? $res."\n" : '')
+                         . log_time() 
+                         . ' '
+                         . MT->translate('Done syncing files to [_1] ([_2])',
+                                        $target, $elapsed);
             MT->log({
                 message => MT->translate('Files synchronization to [_1] complete',
                                         $target),
-                metadata => ($res ? $res."\n" : '') . log_time() . ' '
-                    . MT->translate('Done syncing files to [_1] ([_2])', $target, $elapsed),
+                metadata => $metadata,
                 category => "sync",
                 level => MT::Log::INFO(),
             });
