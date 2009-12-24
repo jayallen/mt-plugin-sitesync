@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-# use MT::Log::Log4perl qw( l4mtdump ); our $logger = MT::Log::Log4perl->new();
+# use MT::Log::Log4perl qw( l4mtdump ); use Log::Log4perl qw( :resurrect ); our $logger ||= MT::Log::Log4perl->new();
 
 use SiteSync;
 
@@ -19,15 +19,15 @@ sub post_init {
     my $plugin               = $cb->plugin;
     my $task_workers         = $mt->registry('task_workers') || {};
     my $cfg                  = MT->config;
-    # $logger ||= MT::Log::Log4perl->new(); $logger->trace();
-    # $logger->info("UseSiteSync: ".$cfg->UseSiteSync);
-    # $logger->info("SyncTarget: ".$cfg->SyncTarget);
-    # $logger->info("DefaultSiteRoot: ".$cfg->DefaultSiteRoot);
+    ###l4p $logger ||= MT::Log::Log4perl->new(); $logger->trace();
+    ###l4p $logger->info("UseSiteSync: ".($cfg->UseSiteSync||''));
+    ###l4p $logger->info("SyncTarget: ".($cfg->SyncTarget||''));
+    ###l4p $logger->info("DefaultSiteRoot: ".($cfg->DefaultSiteRoot||''));
 
     if ( $cfg->UseSiteSync ) {
         my @undef = grep { ! defined $cfg->$_ or $cfg->$_ eq '' }
                             qw( SyncTarget DefaultSiteRoot );
-        # $logger->info('@undefined: ', join(', ', @undef));
+        ###l4p $logger->info('@undefined: ', join(', ', @undef));
 
         if ( @undef ) {
 
@@ -60,17 +60,17 @@ sub post_init {
 sub needs_sync {
     my ($cb, @args) = @_;
     my $plugin      = $cb->plugin;
-    return unless $plugin->{enabled};
+    return 1 unless $plugin->{enabled};
 
-    # $logger ||= MT::Log::Log4perl->new(); $logger->trace();
+    ###l4p $logger ||= MT::Log::Log4perl->new(); $logger->trace();
 
     # If we've already been notified, no need to do it again
-    return if $plugin->{__post_run_callback};
+    return 1 if $plugin->{__post_run_callback};
 
-    # $logger->debug(
-    #     "SiteSync SITE FLAGGED AS NEEDING SYNC - %s"
-    #     .$cb->name
-    # );
+    ###l4p $logger->debug(
+    ###l4p     "SiteSync SITE FLAGGED AS NEEDING SYNC - %s"
+    ###l4p     .$cb->name
+    ###l4p );
 
     my $app = MT->instance;
     if ( $app->isa('MT::App') ) {
@@ -93,7 +93,7 @@ sub cb_cms_post_run {
     my $plugin = $cb->plugin;
     return unless $plugin->{enabled};
 
-    # $logger ||= MT::Log::Log4perl->new(); $logger->trace();
+    ###l4p $logger ||= MT::Log::Log4perl->new(); $logger->trace();
 
     # Create the SiteSync worker for TheSchwartz to process asynchronously
     SiteSync->queue_sync();
