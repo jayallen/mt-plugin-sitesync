@@ -6,7 +6,7 @@ done.
 
 ## VERSION ##
 
-1.0 (released October 31st, 2007)
+1.0.1 (released December 23rd, 2009)
 
 ## REQUIREMENTS ##
 
@@ -32,7 +32,10 @@ Don't configure this yet...
 
 ## VERSION HISTORY ##
 
-* 2009/10/31 - Initial release of v1.0
+* 2009/12/23 -  Fixed a bug which caused a blank error message when saving an 
+                asset because, for some reason, MT/Melody cares about the callback
+                return value for only that one instance and none of the others.
+* 2007/10/31 - Initial release of v1.0
 
 ## TODO ##
 
